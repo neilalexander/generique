@@ -26,12 +26,20 @@ func (m *Map[TK, TV]) Delete(k TK) {
 
 func (m *Map[TK, TV]) Load(key TK) (TV, bool) {
 	value, ok := m.m.Load(key)
-	return value.(TV), ok
+	if !ok {
+		var empty TV
+		return empty, false
+	}
+	return value.(TV), true
 }
 
 func (m *Map[TK, TV]) LoadAndDelete(key TK) (TV, bool) {
 	value, ok := m.m.LoadAndDelete(key)
-	return value.(TV), ok
+	if !ok {
+		var empty TV
+		return empty, false
+	}
+	return value.(TV), true
 }
 
 func (m *Map[TK, TV]) LoadOrStore(key TK, value TV) (TV, bool) {
@@ -47,4 +55,21 @@ func (m *Map[TK, TV]) Range(f func(TK, TV) bool) {
 
 func (m *Map[TK, TV]) Store(key TK, value TV) {
 	m.m.Store(key, value)
+}
+
+func (m *Map[TK, TV]) Swap(key TK, value TV) (TV, bool) {
+	prev, ok := m.m.Swap(key, value)
+	if !ok {
+		var empty TV
+		return empty, false
+	}
+	return prev.(TV), true
+}
+
+func (m *Map[TK, TV]) CompareAndSwap(key TK, old, new TV) bool {
+	return m.m.CompareAndSwap(key, old, new)
+}
+
+func (m *Map[TK, TV]) CompareAndDelete(key TK, old TV) bool {
+	return m.m.CompareAndDelete(key, old)
 }

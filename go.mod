@@ -1,3 +1,3 @@
 module github.com/neilalexander/generique
 
-go 1.18
+go 1.20
